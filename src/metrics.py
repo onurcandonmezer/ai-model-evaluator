@@ -312,8 +312,10 @@ def compute_model_metrics(
     fn = total - passed
     f1 = f1_score(tp, fp, fn)
 
-    latency = latency_percentiles(latencies_ms) if latencies_ms else LatencyPercentiles(
-        p50=0, p95=0, p99=0, mean=0, min=0, max=0
+    latency = (
+        latency_percentiles(latencies_ms)
+        if latencies_ms
+        else LatencyPercentiles(p50=0, p95=0, p99=0, mean=0, min=0, max=0)
     )
 
     avg_cost = (cost_per_1k_input + cost_per_1k_output) / 2

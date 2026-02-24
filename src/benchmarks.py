@@ -387,9 +387,7 @@ class BenchmarkSuite:
         """
         output_lower = model_output.lower()
         found_keywords = [
-            kw
-            for kw in benchmark.expected_output_contains
-            if kw.lower() in output_lower
+            kw for kw in benchmark.expected_output_contains if kw.lower() in output_lower
         ]
 
         total_expected = len(benchmark.expected_output_contains)

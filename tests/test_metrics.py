@@ -163,16 +163,20 @@ class TestComputeModelMetrics:
 class TestCompareModels:
     """Tests for compare_models function."""
 
-    def _make_metrics(self, name: str, accuracy: float, latency_p50: float,
-                      cost: float) -> ModelMetrics:
+    def _make_metrics(
+        self, name: str, accuracy: float, latency_p50: float, cost: float
+    ) -> ModelMetrics:
         return ModelMetrics(
             model_name=name,
             accuracy_score=accuracy,
             f1_score=accuracy,
             latency=LatencyPercentiles(
-                p50=latency_p50, p95=latency_p50 * 1.5,
-                p99=latency_p50 * 2.0, mean=latency_p50,
-                min=latency_p50 * 0.5, max=latency_p50 * 2.5,
+                p50=latency_p50,
+                p95=latency_p50 * 1.5,
+                p99=latency_p50 * 2.0,
+                mean=latency_p50,
+                min=latency_p50 * 0.5,
+                max=latency_p50 * 2.5,
             ),
             cost_per_1k_tokens=cost,
             cost_per_quality_score=cost / accuracy if accuracy > 0 else float("inf"),
@@ -221,8 +225,12 @@ class TestFormatMetricsTable:
             accuracy_score=0.85,
             f1_score=0.82,
             latency=LatencyPercentiles(
-                p50=200.0, p95=350.0, p99=500.0,
-                mean=220.0, min=100.0, max=600.0,
+                p50=200.0,
+                p95=350.0,
+                p99=500.0,
+                mean=220.0,
+                min=100.0,
+                max=600.0,
             ),
             cost_per_1k_tokens=0.005,
             cost_per_quality_score=0.00588,

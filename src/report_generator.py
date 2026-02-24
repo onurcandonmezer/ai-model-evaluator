@@ -94,11 +94,7 @@ class ReportGenerator:
     def _header() -> str:
         """Generate report header."""
         timestamp = datetime.now(UTC).strftime("%Y-%m-%d %H:%M UTC")
-        return (
-            "# AI Model Evaluation Report\n\n"
-            f"**Generated:** {timestamp}\n\n"
-            "---"
-        )
+        return f"# AI Model Evaluation Report\n\n**Generated:** {timestamp}\n\n---"
 
     @staticmethod
     def _executive_summary(report: ModelComparisonReport) -> str:
@@ -267,12 +263,7 @@ class ReportGenerator:
         Returns:
             HTML string with embedded Markdown (pre-formatted).
         """
-        escaped = (
-            markdown_content
-            .replace("&", "&amp;")
-            .replace("<", "&lt;")
-            .replace(">", "&gt;")
-        )
+        escaped = markdown_content.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
         return f"""<!DOCTYPE html>
 <html lang="en">
 <head>

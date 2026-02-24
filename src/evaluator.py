@@ -156,9 +156,7 @@ class ModelEvaluator:
 
         for case in self.suite.cases:
             if self.simulate:
-                output, latency_ms, token_count = self._simulate_response(
-                    model_config, case
-                )
+                output, latency_ms, token_count = self._simulate_response(model_config, case)
             else:
                 output, latency_ms, token_count = self._call_api(model_config, case)
 

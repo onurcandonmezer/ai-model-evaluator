@@ -94,10 +94,7 @@ def main() -> None:
 
         # Filter benchmarks by selected categories
         if selected_categories:
-            filtered_cases = [
-                c for c in suite.cases
-                if c.category.value in selected_categories
-            ]
+            filtered_cases = [c for c in suite.cases if c.category.value in selected_categories]
             suite = BenchmarkSuite(cases=filtered_cases)
 
         evaluator = ModelEvaluator(config=config, benchmark_suite=suite, simulate=simulate)
@@ -105,8 +102,10 @@ def main() -> None:
         with st.spinner("Running evaluation..."):
             results = evaluator.evaluate_all()
 
-        st.success(f"Evaluation complete! Tested {len(results)} models across "
-                   f"{suite.total_cases} benchmarks.")
+        st.success(
+            f"Evaluation complete! Tested {len(results)} models across "
+            f"{suite.total_cases} benchmarks."
+        )
 
         # Store results in session state
         st.session_state["results"] = results
@@ -121,32 +120,36 @@ def main() -> None:
         report = evaluator.get_comparison_report()
 
         # Tabs for different views
-        tab1, tab2, tab3, tab4 = st.tabs([
-            "Overview", "Detailed Metrics", "Category Breakdown", "Report"
-        ])
+        tab1, tab2, tab3, tab4 = st.tabs(
+            ["Overview", "Detailed Metrics", "Category Breakdown", "Report"]
+        )
 
         with tab1:
             st.header("Model Rankings")
 
             ranking_data = []
             for r in report.rankings:
-                ranking_data.append({
-                    "Rank": r.rank,
-                    "Model": r.model_name,
-                    "Overall Score": f"{r.overall_score:.3f}",
-                    "Accuracy": f"{r.scores.get('accuracy', 0):.3f}",
-                    "Latency": f"{r.scores.get('latency', 0):.3f}",
-                    "Cost": f"{r.scores.get('cost', 0):.3f}",
-                })
+                ranking_data.append(
+                    {
+                        "Rank": r.rank,
+                        "Model": r.model_name,
+                        "Overall Score": f"{r.overall_score:.3f}",
+                        "Accuracy": f"{r.scores.get('accuracy', 0):.3f}",
+                        "Latency": f"{r.scores.get('latency', 0):.3f}",
+                        "Cost": f"{r.scores.get('cost', 0):.3f}",
+                    }
+                )
 
             st.dataframe(pd.DataFrame(ranking_data), use_container_width=True, hide_index=True)
 
             # Bar chart of overall scores
             st.subheader("Overall Score Comparison")
-            chart_data = pd.DataFrame({
-                "Model": [r.model_name for r in report.rankings],
-                "Score": [r.overall_score for r in report.rankings],
-            })
+            chart_data = pd.DataFrame(
+                {
+                    "Model": [r.model_name for r in report.rankings],
+                    "Score": [r.overall_score for r in report.rankings],
+                }
+            )
             st.bar_chart(chart_data.set_index("Model"))
 
             # Best-in-class callouts
@@ -168,20 +171,24 @@ def main() -> None:
 
             # Latency comparison
             st.subheader("Latency Comparison (P50, P95, P99)")
-            latency_data = pd.DataFrame({
-                "Model": [m.model_name for m in report.models],
-                "P50": [m.latency.p50 for m in report.models],
-                "P95": [m.latency.p95 for m in report.models],
-                "P99": [m.latency.p99 for m in report.models],
-            })
+            latency_data = pd.DataFrame(
+                {
+                    "Model": [m.model_name for m in report.models],
+                    "P50": [m.latency.p50 for m in report.models],
+                    "P95": [m.latency.p95 for m in report.models],
+                    "P99": [m.latency.p99 for m in report.models],
+                }
+            )
             st.bar_chart(latency_data.set_index("Model"))
 
             # Cost comparison
             st.subheader("Cost per 1K Tokens")
-            cost_data = pd.DataFrame({
-                "Model": [m.model_name for m in report.models],
-                "Cost ($)": [m.cost_per_1k_tokens for m in report.models],
-            })
+            cost_data = pd.DataFrame(
+                {
+                    "Model": [m.model_name for m in report.models],
+                    "Cost ($)": [m.cost_per_1k_tokens for m in report.models],
+                }
+            )
             st.bar_chart(cost_data.set_index("Model"))
 
         with tab3:
@@ -195,8 +202,7 @@ def main() -> None:
                 cat_data: dict[str, list[float]] = {"Category": sorted(all_cats)}
                 for model in report.models:
                     cat_data[model.model_name] = [
-                        model.category_scores.get(cat, 0.0)
-                        for cat in sorted(all_cats)
+                        model.category_scores.get(cat, 0.0) for cat in sorted(all_cats)
                     ]
 
                 df = pd.DataFrame(cat_data)
